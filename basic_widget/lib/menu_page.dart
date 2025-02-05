@@ -1,3 +1,4 @@
+import 'package:basic_widget/counter_app.dart';
 import 'package:basic_widget/grid_view_example.dart';
 import 'package:basic_widget/home_page.dart';
 import 'package:basic_widget/list_view_example.dart';
@@ -37,6 +38,13 @@ class MenuPage extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => GridViewExample()));
               },
               child: Text('Go Grid View Example'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CounterApp()));
+              },
+              child: Text('Go Counter App Example'),
             ),
           ],
         ),
