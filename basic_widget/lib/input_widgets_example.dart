@@ -9,6 +9,7 @@ class InputWidgetsExample extends StatefulWidget {
 
 class _InputWidgetsExampleState extends State<InputWidgetsExample> {
   final nameController = TextEditingController();
+  bool checked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,20 @@ class _InputWidgetsExampleState extends State<InputWidgetsExample> {
                 print(nameController.text);
               },
               child: Text('OK'),
-            )
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  value: checked,
+                  onChanged: (value) {
+                    setState(() {
+                      checked = value!;
+                    });
+                  },
+                ),
+                Text('Flutter')
+              ],
+            ),
           ],
         ),
       ),
