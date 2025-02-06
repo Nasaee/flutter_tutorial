@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+enum Gender {
+  male,
+  female,
+}
+
 class InputWidgetsExample extends StatefulWidget {
   const InputWidgetsExample({super.key});
 
@@ -10,6 +15,7 @@ class InputWidgetsExample extends StatefulWidget {
 class _InputWidgetsExampleState extends State<InputWidgetsExample> {
   final nameController = TextEditingController();
   bool checked = false;
+  Gender gender = Gender.male;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +50,30 @@ class _InputWidgetsExampleState extends State<InputWidgetsExample> {
                   },
                 ),
                 Text('Flutter')
+              ],
+            ),
+            Row(
+              children: [
+                Radio<Gender>(
+                  value: Gender.male,
+                  groupValue: gender,
+                  onChanged: (value) {
+                    setState(() {
+                      gender = value!;
+                    });
+                  },
+                ),
+                Text('Male'),
+                Radio<Gender>(
+                  value: Gender.female,
+                  groupValue: gender,
+                  onChanged: (value) {
+                    setState(() {
+                      gender = value!;
+                    });
+                  },
+                ),
+                Text('Female')
               ],
             ),
           ],
