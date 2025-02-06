@@ -105,21 +105,8 @@ Widget _imageSection(int index,
       ),
       Positioned(
         right: 0,
-        bottom: -35,
-        left: 10,
-        child: Center(
-          child: IconButton(
-              onPressed: () => {},
-              icon: Icon(
-                Icons.favorite,
-                size: 50,
-                color: Colors.red,
-              )),
-        ),
-      ),
-      Positioned(
-        right: 0,
         bottom: 0,
+        top: 0,
         child: Center(
           child: IconButton(
               onPressed: next,
@@ -133,13 +120,28 @@ Widget _imageSection(int index,
       Positioned(
         left: 0,
         bottom: 0,
+        top: 0,
         child: Center(
           child: IconButton(
-              onPressed: next,
+              onPressed: previous,
               icon: Icon(
                 Icons.arrow_back_ios_outlined,
                 size: 50,
                 color: Colors.white,
+              )),
+        ),
+      ),
+      Positioned(
+        right: 0,
+        bottom: -35,
+        left: 10,
+        child: Center(
+          child: IconButton(
+              onPressed: () => {},
+              icon: Icon(
+                Icons.favorite,
+                size: 50,
+                color: Colors.red,
               )),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:basic_widget/counter_app.dart';
 import 'package:basic_widget/grid_view_example.dart';
 import 'package:basic_widget/home_page.dart';
+import 'package:basic_widget/input_widgets_example.dart';
 import 'package:basic_widget/list_view_example.dart';
 import 'package:flutter/material.dart';
 
@@ -45,6 +46,15 @@ class MenuPage extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => CounterApp()));
               },
               child: Text('Go Counter App Example'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => InputWidgetsExample()));
+              },
+              child: Text('Go Input Widgets Example'),
             ),
           ],
         ),
