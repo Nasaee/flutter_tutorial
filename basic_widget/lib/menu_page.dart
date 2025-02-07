@@ -3,6 +3,7 @@ import 'package:basic_widget/grid_view_example.dart';
 import 'package:basic_widget/home_page.dart';
 import 'package:basic_widget/input_widgets_example.dart';
 import 'package:basic_widget/list_view_example.dart';
+import 'package:basic_widget/my_todos_page.dart';
 import 'package:flutter/material.dart';
 
 class MenuPage extends StatelessWidget {
@@ -55,6 +56,13 @@ class MenuPage extends StatelessWidget {
                         builder: (context) => InputWidgetsExample()));
               },
               child: Text('Go Input Widgets Example'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TodoPage()));
+              },
+              child: Text('My Todos'),
             ),
           ],
         ),

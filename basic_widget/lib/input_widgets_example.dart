@@ -5,6 +5,8 @@ enum Gender {
   female,
 }
 
+final countries = ['Japan', 'Korea', 'China', 'USA', 'Vietnam', 'Thailand'];
+
 class InputWidgetsExample extends StatefulWidget {
   const InputWidgetsExample({super.key});
 
@@ -16,6 +18,8 @@ class _InputWidgetsExampleState extends State<InputWidgetsExample> {
   final nameController = TextEditingController();
   bool checked = false;
   Gender gender = Gender.male;
+
+  String? country;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +80,22 @@ class _InputWidgetsExampleState extends State<InputWidgetsExample> {
                 Text('Female')
               ],
             ),
+            DropdownButton<String>(
+              isExpanded: true,
+              hint: Text('Select country'),
+              value: country,
+              items: countries
+                  .map((e) => DropdownMenuItem<String>(
+                        value: e,
+                        child: Text(e),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  country = value;
+                });
+              },
+            )
           ],
         ),
       ),
