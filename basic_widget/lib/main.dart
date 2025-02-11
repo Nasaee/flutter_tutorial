@@ -1,8 +1,13 @@
+import 'package:basic_widget/app_provider.dart';
 import 'package:basic_widget/menu_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => AppProvider(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

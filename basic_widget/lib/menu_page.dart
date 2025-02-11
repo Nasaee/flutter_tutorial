@@ -3,6 +3,7 @@ import 'package:basic_widget/grid_view_example.dart';
 import 'package:basic_widget/home_page.dart';
 import 'package:basic_widget/input_widgets_example.dart';
 import 'package:basic_widget/list_view_example.dart';
+import 'package:basic_widget/counter_provider_state_management.dart';
 import 'package:basic_widget/my_todos_page.dart';
 import 'package:flutter/material.dart';
 
@@ -63,6 +64,15 @@ class MenuPage extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => TodoPage()));
               },
               child: Text('My Todos'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CounterProviderApp()));
+              },
+              child: Text('Todo Provider state management'),
             ),
           ],
         ),
