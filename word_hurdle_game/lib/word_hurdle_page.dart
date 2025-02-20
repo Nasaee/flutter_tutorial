@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:word_hurdle_game/helper_functions.dart';
 import 'package:word_hurdle_game/hurdle_provider.dart';
 import 'package:word_hurdle_game/keyboard_view.dart';
 import 'package:word_hurdle_game/wordle_view.dart';
@@ -29,17 +30,18 @@ class _WordHurdlePageState extends State<WordHurdlePage> {
           children: [
             Expanded(
               child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.7,
+                width: MediaQuery.of(context).size.width * 0.70,
                 child: Consumer<HurdleProvider>(
                   builder: (context, provider, child) => GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 5,
                       mainAxisSpacing: 4,
                       crossAxisSpacing: 4,
                     ),
-                    itemCount: provider.hardleBoard.length,
+                    itemCount: provider.hurdleBoard.length,
                     itemBuilder: (context, index) {
-                      final wordle = provider.hardleBoard[index];
+                      final wordle = provider.hurdleBoard[index];
                       return WordleView(wordle: wordle);
                     },
                   ),
@@ -55,31 +57,20 @@ class _WordHurdlePageState extends State<WordHurdlePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16.0),
               child: Consumer<HurdleProvider>(
                 builder: (context, provider, child) => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      onPressed: provider.deleteLetter,
+                      onPressed: () {
+                        provider.deleteLetter();
+                      },
                       child: const Text('DELETE'),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        if (!provider.isAValidWord) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Not a word in my dictionary!'),
-                            ),
-                          );
-                          return;
-                        }
-
-                        if (provider.shouldCheckForAnswer) {
-                          provider.checkAnswer();
-                        }
-
-                        if (provider.wins) {}
+                        _handleInput(provider);
                       },
                       child: const Text('SUBMIT'),
                     ),
@@ -91,5 +82,42 @@ class _WordHurdlePageState extends State<WordHurdlePage> {
         ),
       ),
     );
+  }
+
+  _handleInput(HurdleProvider provider) {
+    if (!provider.isAValidWord) {
+      showMsg(context, 'Not a word in my dictionary');
+      return;
+    }
+    if (provider.shouldCheckForAnswer) {
+      provider.checkAnswer();
+    }
+    if (provider.wins) {
+      showResult(
+        context: context,
+        title: 'You Win!!!',
+        body: 'The word was ${provider.targetWord}',
+        onPlayAgain: () {
+          Navigator.pop(context);
+          provider.reset();
+        },
+        onCancel: () {
+          Navigator.pop(context);
+        },
+      );
+    } else if (provider.noAttemptsLeft) {
+      showResult(
+        context: context,
+        title: 'You lost!!',
+        body: 'The word was ${provider.targetWord}',
+        onPlayAgain: () {
+          Navigator.pop(context);
+          provider.reset();
+        },
+        onCancel: () {
+          Navigator.pop(context);
+        },
+      );
+    }
   }
 }

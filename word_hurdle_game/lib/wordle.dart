@@ -3,8 +3,9 @@ class Wordle {
   bool existsInTarget;
   bool doesNotExistInTarget;
 
-  Wordle(
-      {required this.letter,
-      this.existsInTarget = false,
-      this.doesNotExistInTarget = false});
+  Wordle({
+    required this.letter,
+    this.existsInTarget = false,
+    this.doesNotExistInTarget = false,
+  });
 }
