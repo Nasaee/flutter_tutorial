@@ -1,0 +1,2 @@
+/home/nasaee/developments/tutorials/flutter_tutorial/flutter_navigation/android/app/.cxx/Debug/1z2w6u16/armeabi-v7a/CMakeFiles/edit_cache.dir
+/home/nasaee/developments/tutorials/flutter_tutorial/flutter_navigation/android/app/.cxx/Debug/1z2w6u16/armeabi-v7a/CMakeFiles/rebuild_cache.dir
