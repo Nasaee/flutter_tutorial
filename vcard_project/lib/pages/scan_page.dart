@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ScanPage extends StatefulWidget {
@@ -11,6 +15,8 @@ class ScanPage extends StatefulWidget {
 }
 
 class _ScanPageState extends State<ScanPage> {
+  bool isScanOver = false;
+  List<String> lines = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +42,7 @@ class _ScanPageState extends State<ScanPage> {
               ),
             ],
           ),
+          Wrap(children: lines.map((line) => Text(line)).toList()),
         ],
       ),
     );
@@ -44,8 +51,25 @@ class _ScanPageState extends State<ScanPage> {
   void getImage(ImageSource cemera) async {
     final xFile = await ImagePicker().pickImage(source: cemera);
     if (xFile != null) {
-      xFile.path;
-      print(xFile.path);
+      EasyLoading.show(status: 'Please wait...');
+      final textRecognizer = TextRecognizer(
+        script: TextRecognitionScript.latin,
+      );
+      final recognizedText = await textRecognizer.processImage(
+        InputImage.fromFile(File(xFile.path)),
+      );
+      EasyLoading.dismiss();
+      final tempList = <String>[];
+      for (var block in recognizedText.blocks) {
+        for (var line in block.lines) {
+          tempList.add(line.text);
+        }
+      }
+      // print(tempList);
+      setState(() {
+        lines = tempList;
+        isScanOver = true;
+      });
     }
   }
 }
