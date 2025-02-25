@@ -42,7 +42,7 @@ class _ScanPageState extends State<ScanPage> {
               ),
             ],
           ),
-          Wrap(children: lines.map((line) => Text(line)).toList()),
+          Wrap(children: lines.map((line) => LineItem(line: line)).toList()),
         ],
       ),
     );
@@ -71,5 +71,30 @@ class _ScanPageState extends State<ScanPage> {
         isScanOver = true;
       });
     }
+  }
+}
+
+class LineItem extends StatelessWidget {
+  final String line;
+  const LineItem({super.key, required this.line});
+
+  @override
+  Widget build(BuildContext context) {
+    return LongPressDraggable(
+      data: line,
+      dragAnchorStrategy: childDragAnchorStrategy,
+      feedback: Container(
+        key: GlobalKey(),
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(color: Colors.black45),
+        child: Text(
+          line,
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium!.copyWith(color: Colors.white),
+        ),
+      ),
+      child: Chip(label: Text(line)),
+    );
   }
 }
