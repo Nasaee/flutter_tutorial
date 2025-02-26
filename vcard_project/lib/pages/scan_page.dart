@@ -18,10 +18,24 @@ class ScanPage extends StatefulWidget {
 class _ScanPageState extends State<ScanPage> {
   bool isScanOver = false;
   List<String> lines = [];
+  String name = '',
+      mobile = '',
+      email = '',
+      address = '',
+      company = '',
+      designation = '',
+      website = '',
+      image = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Scan Page')),
+      appBar: AppBar(
+        title: const Text('Scan Page'),
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_forward)),
+        ],
+      ),
       body: ListView(
         children: [
           Row(
@@ -43,19 +57,46 @@ class _ScanPageState extends State<ScanPage> {
               ),
             ],
           ),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  DragTargetItem(
-                    property: ContactProperties.name,
-                    onDrop: () {},
-                  ),
-                ],
+          if (isScanOver)
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    DragTargetItem(
+                      property: ContactProperties.name,
+                      onDrop: getPropertyValue,
+                    ),
+                    DragTargetItem(
+                      property: ContactProperties.mobile,
+                      onDrop: getPropertyValue,
+                    ),
+                    DragTargetItem(
+                      property: ContactProperties.email,
+                      onDrop: getPropertyValue,
+                    ),
+                    DragTargetItem(
+                      property: ContactProperties.company,
+                      onDrop: getPropertyValue,
+                    ),
+                    DragTargetItem(
+                      property: ContactProperties.designation,
+                      onDrop: getPropertyValue,
+                    ),
+                    DragTargetItem(
+                      property: ContactProperties.address,
+                      onDrop: getPropertyValue,
+                    ),
+                    DragTargetItem(
+                      property: ContactProperties.website,
+                      onDrop: getPropertyValue,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
+          if (isScanOver)
+            const Padding(padding: EdgeInsets.all(8.0), child: Text(hint)),
           Wrap(children: lines.map((line) => LineItem(line: line)).toList()),
         ],
       ),
@@ -84,6 +125,47 @@ class _ScanPageState extends State<ScanPage> {
         lines = tempList;
         isScanOver = true;
       });
+    }
+  }
+
+  getPropertyValue(String property, String value) {
+    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    switch (property) {
+      case ContactProperties.name:
+        setState(() {
+          name = value;
+        });
+        break;
+      case ContactProperties.mobile:
+        setState(() {
+          mobile = value;
+        });
+        break;
+      case ContactProperties.email:
+        setState(() {
+          email = value;
+        });
+        break;
+      case ContactProperties.address:
+        setState(() {
+          address = value;
+        });
+        break;
+      case ContactProperties.company:
+        setState(() {
+          company = value;
+        });
+        break;
+      case ContactProperties.designation:
+        setState(() {
+          designation = value;
+        });
+        break;
+      case ContactProperties.website:
+        setState(() {
+          website = value;
+        });
+        break;
     }
   }
 }
@@ -128,6 +210,7 @@ class DragTargetItem extends StatefulWidget {
 
 class _DragTargetItemState extends State<DragTargetItem> {
   String dragItem = '';
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -162,12 +245,12 @@ class _DragTargetItemState extends State<DragTargetItem> {
                     ],
                   ),
                 ),
-            onAccept: (value) {
+            onAcceptWithDetails: (details) {
               setState(() {
                 if (dragItem.isEmpty) {
-                  dragItem = value;
+                  dragItem = details.data;
                 } else {
-                  dragItem += ' $value';
+                  dragItem += ' ${details.data}';
                 }
               });
             },
