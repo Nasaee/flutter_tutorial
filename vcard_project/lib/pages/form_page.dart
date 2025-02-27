@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:vcard_project/models/contact_model.dart';
+import 'package:vcard_project/pages/home_page.dart';
+import 'package:vcard_project/providers/contact_provider.dart';
 import 'package:vcard_project/utils/constants.dart';
+import 'package:vcard_project/utils/helper_funtions.dart';
 
 class FormPage extends StatefulWidget {
   static const String routeName = 'form';
@@ -13,38 +18,43 @@ class FormPage extends StatefulWidget {
 
 class _FormPageState extends State<FormPage> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _mobileController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _companyController = TextEditingController();
-  final _designationController = TextEditingController();
-  final _addressController = TextEditingController();
-  final _websiteController = TextEditingController();
+  final nameController = TextEditingController();
+  final mobileController = TextEditingController();
+  final emailController = TextEditingController();
+  final addressController = TextEditingController();
+  final companyController = TextEditingController();
+  final designationController = TextEditingController();
+  final webController = TextEditingController();
 
   @override
   void initState() {
-    _nameController.text = widget.contactModel.name;
-    _mobileController.text = widget.contactModel.mobile;
-    _emailController.text = widget.contactModel.email;
-    _companyController.text = widget.contactModel.company;
-    _designationController.text = widget.contactModel.designation;
-    _addressController.text = widget.contactModel.address;
-    _websiteController.text = widget.contactModel.website;
+    nameController.text = widget.contactModel.name;
+    mobileController.text = widget.contactModel.mobile;
+    emailController.text = widget.contactModel.email;
+    addressController.text = widget.contactModel.address;
+    companyController.text = widget.contactModel.company;
+    designationController.text = widget.contactModel.designation;
+    webController.text = widget.contactModel.website;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Form Page')),
+      appBar: AppBar(
+        title: Text('Form Page'),
+        actions: [
+          IconButton(onPressed: saveContact, icon: const Icon(Icons.save)),
+        ],
+      ),
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16.0),
           children: [
             TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Contact Name'),
+              controller: nameController,
+              decoration: InputDecoration(labelText: 'Contact Name'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return emptyFieldErrMsg;
@@ -54,8 +64,8 @@ class _FormPageState extends State<FormPage> {
             ),
             TextFormField(
               keyboardType: TextInputType.phone,
-              controller: _mobileController,
-              decoration: const InputDecoration(labelText: 'Mobile Number'),
+              controller: mobileController,
+              decoration: InputDecoration(labelText: 'Mobile Number'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return emptyFieldErrMsg;
@@ -65,44 +75,40 @@ class _FormPageState extends State<FormPage> {
             ),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email Address'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return emptyFieldErrMsg;
-                } else if (!value.contains('@')) {
-                  return 'Invalid Email Address';
-                }
-                return null;
-              },
-            ),
-            TextFormField(
-              controller: _addressController,
-              decoration: const InputDecoration(labelText: 'Street Address'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return emptyFieldErrMsg;
-                }
-                return null;
-              },
-            ),
-            TextFormField(
-              controller: _companyController,
-              decoration: const InputDecoration(labelText: 'Company Name'),
+              controller: emailController,
+              decoration: InputDecoration(labelText: 'Email'),
               validator: (value) {
                 return null;
               },
             ),
             TextFormField(
-              controller: _designationController,
-              decoration: const InputDecoration(labelText: 'Designation'),
+              keyboardType: TextInputType.phone,
+              controller: addressController,
+              decoration: InputDecoration(labelText: 'Street Address'),
               validator: (value) {
                 return null;
               },
             ),
             TextFormField(
-              controller: _websiteController,
-              decoration: const InputDecoration(labelText: 'Website'),
+              keyboardType: TextInputType.phone,
+              controller: companyController,
+              decoration: InputDecoration(labelText: 'Company Name'),
+              validator: (value) {
+                return null;
+              },
+            ),
+            TextFormField(
+              keyboardType: TextInputType.phone,
+              controller: designationController,
+              decoration: InputDecoration(labelText: 'Designation'),
+              validator: (value) {
+                return null;
+              },
+            ),
+            TextFormField(
+              keyboardType: TextInputType.phone,
+              controller: webController,
+              decoration: InputDecoration(labelText: 'Website'),
               validator: (value) {
                 return null;
               },
@@ -115,13 +121,38 @@ class _FormPageState extends State<FormPage> {
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _mobileController.dispose();
-    _emailController.dispose();
-    _companyController.dispose();
-    _designationController.dispose();
-    _addressController.dispose();
-    _websiteController.dispose();
+    nameController.dispose();
+    mobileController.dispose();
+    emailController.dispose();
+    addressController.dispose();
+    companyController.dispose();
+    designationController.dispose();
+    webController.dispose();
     super.dispose();
+  }
+
+  void saveContact() async {
+    if (_formKey.currentState!.validate()) {
+      widget.contactModel.name = nameController.text;
+      widget.contactModel.mobile = mobileController.text;
+      widget.contactModel.email = emailController.text;
+      widget.contactModel.address = addressController.text;
+      widget.contactModel.company = companyController.text;
+      widget.contactModel.designation = designationController.text;
+      widget.contactModel.website = webController.text;
+      //print(widget.contactModel);
+
+      Provider.of<ContactProvider>(context, listen: false)
+          .insertContact(widget.contactModel)
+          .then((value) {
+            if (value > 0) {
+              showMsg(context, 'Saved');
+              context.goNamed(HomePage.routeName);
+            }
+          })
+          .catchError((error) {
+            showMsg(context, 'Failed to save');
+          });
+    }
   }
 }
