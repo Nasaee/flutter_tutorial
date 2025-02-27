@@ -9,7 +9,9 @@ class ContactProvider extends ChangeNotifier {
   Future<int> insertContact(ContactModel contactModel) async {
     final rowId = await db.insertContact(contactModel);
     contactModel.id = rowId;
-    contactList.add(contactModel);
+    contactList.add(
+      contactModel,
+    ); // update the list before notifying the listeners to update the UI
     notifyListeners();
     return rowId;
   }
@@ -17,5 +19,12 @@ class ContactProvider extends ChangeNotifier {
   Future<void> getAllContacts() async {
     contactList = await db.getAllContacts();
     notifyListeners();
+  }
+
+  Future<int> deleteContact(int id) async {
+    final rowId = await db.deleteContact(id);
+    contactList.removeWhere((element) => element.id == id);
+    notifyListeners();
+    return rowId;
   }
 }

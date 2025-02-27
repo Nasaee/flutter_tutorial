@@ -51,4 +51,13 @@ class DbHelper {
       return ContactModel.fromMap(mapList[index]);
     });
   }
+
+  Future<int> deleteContact(int id) async {
+    final db = await _open();
+    return db.delete(
+      tableContact,
+      where: '$tblContactColId = ?', // ? is a placeholder
+      whereArgs: [id],
+    );
+  }
 }
