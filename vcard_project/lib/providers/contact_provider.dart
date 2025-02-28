@@ -21,10 +21,23 @@ class ContactProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<int> deleteContact(int id) async {
-    final rowId = await db.deleteContact(id);
-    contactList.removeWhere((element) => element.id == id);
+  Future<ContactModel> getContactById(int id) => db.getContactById(id);
+
+  Future<void> getAllFavoriteContacts() async {
+    contactList = await db.getAllFavoriteContacts();
     notifyListeners();
-    return rowId;
+  }
+
+  Future<int> deleteContact(int id) {
+    return db.deleteContact(id);
+  }
+
+  Future<void> updateFavorite(ContactModel contactModel) async {
+    final value = contactModel.favorite ? 0 : 1;
+    await db.updateFavorite(contactModel.id, value);
+    final index = contactList.indexOf(contactModel);
+    contactList[index].favorite = !contactList[index].favorite;
+    notifyListeners();
   }
 }
+ // FutureBuilder: is a widget to build a widget based on the future value

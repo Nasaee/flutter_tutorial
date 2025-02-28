@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:vcard_project/pages/contact_details_page.dart';
 import 'package:vcard_project/pages/scan_page.dart';
 import 'package:vcard_project/providers/contact_provider.dart';
 import 'package:vcard_project/utils/helper_funtions.dart';
@@ -45,6 +46,7 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               selectedIndex = index;
             });
+            _fetchData();
           },
           currentIndex: selectedIndex,
 
@@ -78,9 +80,17 @@ class _HomePageState extends State<HomePage> {
                     showMsg(context, 'Deleted!');
                   },
                   child: ListTile(
+                    onTap: () {
+                      context.goNamed(
+                        ContactDetailsPage.routeName,
+                        extra: contact.id,
+                      );
+                    },
                     title: Text(contact.name),
                     trailing: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        provider.updateFavorite(contact);
+                      },
                       icon: Icon(
                         contact.favorite
                             ? Icons.favorite
@@ -120,5 +130,19 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
     );
+  }
+
+  void _fetchData() {
+    switch (selectedIndex) {
+      case 0:
+        Provider.of<ContactProvider>(context, listen: false).getAllContacts();
+        break;
+      case 1:
+        Provider.of<ContactProvider>(
+          context,
+          listen: false,
+        ).getAllFavoriteContacts();
+        break;
+    }
   }
 }
